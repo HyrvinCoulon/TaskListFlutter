@@ -14,7 +14,7 @@ class HomeMain extends StatelessWidget{
           children: [
             new Text('No TaskList For now !!!',
               style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 20,
                   color: Color(0xFF40C4FF)
               ),
             ),

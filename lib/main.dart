@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'Task.dart';
+import 'User.dart';
 import 'HomeMain.dart';
 
 void main() {
@@ -14,10 +16,13 @@ var list = {"lightBlueI":0xFF29B6F6,
   'redAccent':0xFFD50000,
   "black":0xFF000000,
   "bleuCanard":0xFF316879,
-  "coral":0xFFF60A60
+  "coral":0xFFF60A60,
+  "turquoise":0xFF7FE7DC
 };
 
-dynamic ListTask = {};
+
+// ignore: non_constant_identifier_names
+//dynamic ListTask = {"essai": [" "]};
 
 class MyApp extends StatelessWidget {
 
@@ -27,7 +32,11 @@ class MyApp extends StatelessWidget {
     return new  MaterialApp( // Always make it new for understandement
          title: 'TaskList',
 
-         theme: new ThemeData(scaffoldBackgroundColor: Color(list['bleuCanard'])),
+
+         theme: new ThemeData(scaffoldBackgroundColor: Colors.white,
+            textTheme: GoogleFonts.montserratAlternatesTextTheme(Theme.of(context).textTheme),
+
+         ),
          
          // Main Page
          home: Home(),
@@ -43,15 +52,21 @@ class Home extends StatefulWidget {
   }
 }
 
+
+
 class _HomePage extends State<Home>{
 
+  static User u = new User();
+
   int _currentIndex = 0, globalIndex = 0;
+
   final List<Widget> _children = [
     HomeMain(),
-    Task(list),
-    TodoList()
+    TaskState(list, u.list),
+    TodoList(u.list)
   ];
   double visible = 0;
+
 
   void onTabTapped(int index) {
     setState(() {
@@ -70,8 +85,9 @@ class _HomePage extends State<Home>{
 
        appBar: new AppBar(
            title: new Text('Tasked !!!'),
-           backgroundColor: Color(list["lightBlueI"])
+           backgroundColor: Color(list['bleuCanard'])
         ),
+
         body: _children[globalIndex],
 
         floatingActionButton: Opacity(
@@ -93,7 +109,7 @@ class _HomePage extends State<Home>{
 
         bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Color(list["lightBlueI"]),
+            backgroundColor: Color(list['bleuCanard']),
             selectedItemColor: Colors.white,
             unselectedItemColor: Color(list["coral"]),
             selectedFontSize: 15,

@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 
-class Task extends StatelessWidget{
+class TaskState extends StatefulWidget {
 
   final Map list;
+  Map l;
 
-  Task(this.list);
+
+  TaskState(this.list, this.l);
+
+  @override
+  createState() => new Task(this.list, this.l);
+}
+
+// ignore: must_be_immutable
+class Task extends State<TaskState>{
+
+  final Map list;
+  Map taskList;
+
+  Task(this.list, this.taskList);
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +33,73 @@ class Task extends StatelessWidget{
             children: [
               new Text('TaskPage !!!',
                 style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 20,
                     color: Color(list["lightBlueIsh"])
                 ),
               ),
+
+              Expanded(child: _buildList()),
             ],
             
           ),
         
         );
   }
+
+  Widget _buildList() {
+    return new ListView.separated(
+      itemCount: taskList.length,
+      padding: const EdgeInsets.all(8),
+      shrinkWrap: true,
+      // ignore: missing_return
+      itemBuilder: (context, index){
+        /*if(index < taskList.length) {
+          return _buildItem(taskList[index]);
+        }*/
+        String  key = taskList.keys.elementAt(index);
+        return _buildItem(key);
+        /*if(taskList == null && index == 0){
+          return Center(child: new Text('No TaskLists Input'),);
+        }
+
+          taskList.forEach((key, value) {
+            print(key);
+            setState(() {
+              return _buildItem(key);
+            });
+          });*/
+
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+     );
+  }
+
+  // Build a single todo item
+  Widget _buildItem(String todoText) {
+
+    return Container(
+       height : 50,
+       decoration: BoxDecoration(
+         color: Color(0xFF7FE7DC),
+         border: Border.all(
+           color: Colors.white,
+         ),
+         borderRadius: BorderRadius.all(Radius.circular(20)),
+       ),
+       child : Center(
+
+            child: new Text(todoText,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white
+              ),
+            )
+
+       ),
+    );
+  }
+
+
 }
 
 
@@ -148,23 +220,31 @@ class AddTasks extends StatelessWidget{
 }
 
 class TodoList extends StatefulWidget {
+
+  Map l;
+
+  TodoList(this.l);
+
   @override
-  createState() => new TodoListState();
+  createState() => new TodoListState(l);
 }
 
 class TodoListState extends State<TodoList> {
+
   List<String> _todoItems = [];
+  int head = 0;
+  TextEditingController inputTask = new TextEditingController(), nameList = new TextEditingController(text: " ");
+  Map l;
 
-  TextEditingController inputTask = new TextEditingController(), nameList;
-
-  /*void _addTodoItem() {
-      _todoItems.add('Item ' + index.toString());
-  }*/
+  TodoListState(Map l){
+    this.l = l;
+  }
 
 
   Widget _buildTodoList() {
-    return new ListView.builder(
 
+    return new ListView.separated(
+      padding: const EdgeInsets.all(8),
       itemCount: 20,
       shrinkWrap: true,
       // ignore: missing_return
@@ -173,15 +253,27 @@ class TodoListState extends State<TodoList> {
           return _buildTodoItem(_todoItems[index]);
         }
       },
-
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
 
   // Build a single todo item
   Widget _buildTodoItem(String todoText) {
 
-    return new ListTile(
-        title: new Text(todoText)
+    return Container(
+      height : 50,
+      color: Color(0xFF7FE7DC),
+      
+      child : Center(
+
+          child: new Text(todoText,
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.white
+            ),
+          )
+
+      ),
     );
   }
 
@@ -195,10 +287,12 @@ class TodoListState extends State<TodoList> {
         children: <Widget>[
 
           Text(
-              'Bonjour'
+              nameList.text
           ),
 
-          _buildTodoList(),
+          Expanded(
+            child: _buildTodoList()
+          ),
 
           new Row(
 
@@ -240,8 +334,17 @@ class TodoListState extends State<TodoList> {
                   child: OutlineButton(
                     onPressed: () {
                       setState(() {
-                        _todoItems.add(inputTask.text);
-                        print(_todoItems);
+                        if(head == 0){
+                          nameList.text = inputTask.text;
+                          l[nameList.text] = new List<String>();
+                          //print(l);
+                          head += 1;
+                        }else {
+                          l[nameList.text].add(inputTask.text);
+                          print(l);
+                          _todoItems.add(inputTask.text);
+                          //print(_todoItems);
+                        }
                       });
 
                     },
