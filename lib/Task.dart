@@ -53,21 +53,8 @@ class Task extends State<TaskState>{
       shrinkWrap: true,
       // ignore: missing_return
       itemBuilder: (context, index){
-        /*if(index < taskList.length) {
-          return _buildItem(taskList[index]);
-        }*/
         String  key = taskList.keys.elementAt(index);
         return _buildItem(key);
-        /*if(taskList == null && index == 0){
-          return Center(child: new Text('No TaskLists Input'),);
-        }
-
-          taskList.forEach((key, value) {
-            print(key);
-            setState(() {
-              return _buildItem(key);
-            });
-          });*/
 
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
@@ -86,6 +73,7 @@ class Task extends State<TaskState>{
          ),
          borderRadius: BorderRadius.all(Radius.circular(20)),
        ),
+
        child : Center(
 
             child: new Text(todoText,
@@ -105,7 +93,7 @@ class Task extends State<TaskState>{
 
 
 // ignore: must_be_immutable
-class AddTasks extends StatelessWidget{
+/*class AddTasks extends StatelessWidget{
 
   List<String> _todoItems = [];
 
@@ -217,7 +205,7 @@ class AddTasks extends StatelessWidget{
     );
   }
 
-}
+}*/
 
 class TodoList extends StatefulWidget {
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'RestApi/rest_api.dart';
 import 'Task.dart';
 import 'User.dart';
 import 'HomeMain.dart';
@@ -39,7 +41,13 @@ class MyApp extends StatelessWidget {
          ),
          
          // Main Page
-         home: Home(),
+         home: MultiProvider(
+           
+           providers: [
+             ChangeNotifierProvider(create: (context) => TodoProvider())
+           ],
+               child:Home(),
+         ),
       );
   }
 }
@@ -53,19 +61,29 @@ class Home extends StatefulWidget {
 }
 
 
-
+var todoL;
 class _HomePage extends State<Home>{
 
   static User u = new User();
-
   int _currentIndex = 0, globalIndex = 0;
+  double visible = 0;
+  TodoProvider todoProvider;
 
   final List<Widget> _children = [
     HomeMain(),
     TaskState(list, u.list),
     TodoList(u.list)
   ];
-  double visible = 0;
+
+  /*_HomePage(){
+    todoProvider = Provider.of<TodoProvider>(context);
+  }
+  @override
+  void initState() {
+    todoL = Provider.of<TodoProvider>(context);
+    super.initState();
+  }*/
+
 
 
   void onTabTapped(int index) {
